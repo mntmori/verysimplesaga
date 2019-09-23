@@ -20,7 +20,7 @@ public class ResourceController {
      * For easy e2e testing
      */
     @GetMapping(path = "/api/v1/resource/sign/creation", produces = APPLICATION_JSON_VALUE)
-    public void resourceDto() {
+    public void sign() {
         ApproveResourceCreation approveResourceCreation = ApproveResourceCreation.of();
         applicationGateway
                 //We can validate request body here, can be helpfully when more sophisticated validation is needed
