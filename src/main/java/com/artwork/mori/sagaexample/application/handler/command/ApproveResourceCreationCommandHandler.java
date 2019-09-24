@@ -1,8 +1,9 @@
-package com.artwork.mori.sagaexample.application.command;
+package com.artwork.mori.sagaexample.application.handler.command;
 
 
+import com.artwork.mori.sagaexample.application.command.ApproveResourceCreation;
 import com.artwork.mori.sagaexample.application.saga.ApproveResourceCreationData;
-import com.artwork.mori.sagaexample.application.saga.ApproveResourceCreationSaga;
+import com.artwork.mori.sagaexample.application.saga.SimpleSagaManager;
 import com.artwork.mori.sagaexample.tool.saga.SagaInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +16,11 @@ public class ApproveResourceCreationCommandHandler implements CommandHandler<App
 
     @Override
     public Void apply(ApproveResourceCreation command) {
-        SagaInstance<ApproveResourceCreationData> sagaInstance = new ApproveResourceCreationSaga();
-        ApproveResourceCreationData creationData = sagaInstance.start(new ApproveResourceCreationData());
+        ApproveResourceCreationData sagaData = new ApproveResourceCreationData();
+
+        SagaInstance<ApproveResourceCreationData> sagaInstance = new SimpleSagaManager().newInstance();
+        ApproveResourceCreationData creationData = sagaInstance.start(sagaData);
+
         LOGGER.info("Saga staus: {}", creationData);
         return null;
     }

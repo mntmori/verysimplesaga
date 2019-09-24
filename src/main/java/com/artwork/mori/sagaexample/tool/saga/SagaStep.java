@@ -9,7 +9,7 @@ public class SagaStep<E> {
     private final Consumer<E> action;
     private final Consumer<E> compensation;
 
-    SagaStep(String name, Consumer<E> action, Consumer<E> compensation) {
+    SagaStep(final String name, final Consumer<E> action, final Consumer<E> compensation) {
         Objects.requireNonNull(name, "Saga step name must be specified");
         this.name = name;
         this.action = action;
@@ -24,7 +24,7 @@ public class SagaStep<E> {
         return action;
     }
 
-    public Consumer<E> getCompensation() {
+    Consumer<E> getCompensation() {
         return compensation;
     }
 

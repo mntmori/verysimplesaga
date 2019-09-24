@@ -11,7 +11,7 @@ public class ApproveResourceCreationSaga extends SagaInstance<ApproveResourceCre
 
     @Override
     public SagaDefinition<ApproveResourceCreationData> getSagaDefinition() {
-        SagaDefinition<ApproveResourceCreationData> sagaDefinition = new SagaDefinition<>();
+        final SagaDefinition<ApproveResourceCreationData> sagaDefinition = new SagaDefinition<>();
         sagaDefinition
                 .step("create draft", this::createDraft, this::onCreateFailure)
                 .step("update draft", this::updateDraft, this::onUpdateFailure)
@@ -19,36 +19,36 @@ public class ApproveResourceCreationSaga extends SagaInstance<ApproveResourceCre
         return sagaDefinition;
     }
 
-    private void createDraft(ApproveResourceCreationData approveResourceCreationData) {
+    private void createDraft(final ApproveResourceCreationData approveResourceCreationData) {
         LOGGER.info("Creating draft!");
         approveResourceCreationData.setDraftCreated(true);
     }
 
-    private void updateDraft(ApproveResourceCreationData approveResourceCreationData) {
+    private void updateDraft(final ApproveResourceCreationData approveResourceCreationData) {
         LOGGER.info("Updating draft!");
         approveResourceCreationData.setDraftUpdated(true);
     }
 
-    private void callOrders(ApproveResourceCreationData approveResourceCreationData) {
+    private void callOrders(final ApproveResourceCreationData approveResourceCreationData) {
         if (approveResourceCreationData.isDraftCreated()) {
             approveResourceCreationData.setDraftSigned(true);
             LOGGER.info("Calling orders...");
         }
     }
 
-    private void onCreateFailure(ApproveResourceCreationData approveResourceCreationData) {
+    private void onCreateFailure(final ApproveResourceCreationData approveResourceCreationData) {
         approveResourceCreationData.setHasError(true);
         approveResourceCreationData.setDraftCreated(false);
         LOGGER.error("Creating draft step compensated");
     }
 
-    private void onUpdateFailure(ApproveResourceCreationData approveResourceCreationData) {
+    private void onUpdateFailure(final ApproveResourceCreationData approveResourceCreationData) {
         approveResourceCreationData.setHasError(true);
         approveResourceCreationData.setDraftUpdated(false);
         LOGGER.error("Updating draft step compensated");
     }
 
-    private void onCallingFailure(ApproveResourceCreationData approveResourceCreationData) {
+    private void onCallingFailure(final ApproveResourceCreationData approveResourceCreationData) {
         approveResourceCreationData.setHasError(true);
         approveResourceCreationData.setDraftUpdated(false);
         LOGGER.error("Calling orders step compensated");

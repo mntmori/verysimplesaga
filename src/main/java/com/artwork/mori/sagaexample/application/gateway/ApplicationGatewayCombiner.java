@@ -1,7 +1,7 @@
 package com.artwork.mori.sagaexample.application.gateway;
 
 import com.artwork.mori.sagaexample.application.command.ApproveResourceCreation;
-import com.artwork.mori.sagaexample.application.command.CommandHandler;
+import com.artwork.mori.sagaexample.application.handler.command.CommandHandler;
 import com.artwork.mori.sagaexample.application.command.PutResource;
 import com.artwork.mori.sagaexample.application.model.dto.ResourceDto;
 import com.artwork.mori.sagaexample.application.validator.Validator;

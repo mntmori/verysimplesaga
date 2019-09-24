@@ -1,5 +1,6 @@
-package com.artwork.mori.sagaexample.application.command;
+package com.artwork.mori.sagaexample.application.handler.command;
 
+import com.artwork.mori.sagaexample.application.command.PutResource;
 import com.artwork.mori.sagaexample.application.model.dto.ResourceDto;
 import org.springframework.stereotype.Component;
 
