@@ -3,7 +3,7 @@ package com.artwork.mori.sagaexample.tool.saga;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Iterator;
+import java.util.*;
 
 public abstract class SagaInstance<E> {
 
@@ -13,27 +13,28 @@ public abstract class SagaInstance<E> {
 
     public E start(E initialState) {
         SagaDefinition<E> sagaDefinition = getSagaDefinition();
-        sagaDefinition.getSagaSteps()
-                .stream()
-                .forEach(eSagaStep -> {
-                    try {
-                        eSagaStep.getAction().accept(initialState);
-                    } catch (Exception e) {
-                        compensate(initialState, sagaDefinition, eSagaStep);
-                    }
-
-                });
+        for (SagaStep<E> sagaStep : sagaDefinition.getSagaSteps()) {
+            try {
+                sagaStep.getAction().accept(initialState);
+            } catch (Exception e) {
+                compensate(initialState, sagaDefinition, sagaStep);
+                break;
+            }
+        }
         return initialState;
     }
 
-    private void compensate(E initialState, SagaDefinition<E> sagaDefinition, SagaStep<E> eSagaStep) {
-        LOGGER.error("Step " + eSagaStep.getName() + " failed!");
-        Iterator<SagaStep<E>> sagaStepIterator = sagaDefinition.getSagaSteps().descendingIterator();
-        while (sagaStepIterator.hasNext()) {
-            SagaStep<E> compensationStep = sagaStepIterator.next();
-            String name = compensationStep.getName();
-            compensationStep.getCompensation().accept(initialState);
-            System.out.println(name);
+    private void compensate(E initialState, SagaDefinition<E> sagaDefinition, SagaStep<E> failedStep) {
+        LOGGER.error("Step {} failed!", failedStep.getName());
+        List<SagaStep<E>> sagaSteps = sagaDefinition.getSagaSteps();
+        ArrayList<SagaStep<E>> clone = new ArrayList<>(sagaSteps);
+        Collections.reverse(clone);
+        int failedStepIndex = clone.indexOf(failedStep);
+        ListIterator<SagaStep<E>> sagaStepListIterator = clone.listIterator(failedStepIndex);
+        while (sagaStepListIterator.hasNext()) {
+            SagaStep<E> next = sagaStepListIterator.next();
+            LOGGER.error("Calling {} compensation method!", next.getName());
+            next.getCompensation().accept(initialState);
         }
     }
 }

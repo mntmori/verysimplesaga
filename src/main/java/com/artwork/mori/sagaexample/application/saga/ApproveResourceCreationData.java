@@ -9,6 +9,7 @@ import lombok.ToString;
 @ToString
 public class ApproveResourceCreationData {
     private boolean draftCreated;
+    private boolean draftUpdated;
     private boolean draftSigned;
     private boolean hasError;
 }
