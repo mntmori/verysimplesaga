@@ -1,5 +1,6 @@
 package com.artwork.mori.sagaexample.application.saga;
 
+import com.artwork.mori.sagaexample.domain.Draft;
 import com.artwork.mori.sagaexample.tool.saga.SagaData;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,15 +10,27 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ApproveResourceCreationData extends SagaData<ApproveResourceCreationData.ImmutableModel> {
+public class ApproveResourceCreationData implements SagaData<ApproveResourceCreationData.ImmutableModel> {
+
+    private final ImmutableModel immutableModel;
 
     private boolean draftCreated;
     private boolean draftUpdated;
     private boolean draftSigned;
     private boolean hasError;
+    private Draft draft;
 
     public ApproveResourceCreationData() {
-        super(ImmutableModel.of(false, false, false, false));
+        this.immutableModel = ImmutableModel.of(false, false, false, false);
+    }
+
+    @Override
+    public ImmutableModel getImmutableModel() {
+        return this.immutableModel;
+    }
+
+    public void setDraft(Draft draft) {
+        this.draft = draft;
     }
 
     @Getter

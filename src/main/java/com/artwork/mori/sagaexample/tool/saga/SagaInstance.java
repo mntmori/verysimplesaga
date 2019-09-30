@@ -5,44 +5,44 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-public abstract class SagaInstance<E extends SagaData> {
+public abstract class SagaInstance<D extends SagaData> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SagaInstance.class);
 
-    public abstract SagaDefinition<E> getSagaDefinition();
+    public abstract SagaDefinition<D> getSagaDefinition();
 
-    public E start(final E initialState) {
-        SagaDefinition<E> sagaDefinition = getSagaDefinition();
-        for (SagaStep<E> sagaStep : sagaDefinition.getSagaSteps()) {
+    public D start(final D sagaData) {
+        SagaDefinition<D> sagaDefinition = getSagaDefinition();
+        for (SagaStep<D> sagaStep : sagaDefinition.getSagaSteps()) {
             try {
-                sagaStep.getAction().accept(initialState);
+                sagaStep.getAction().accept(sagaData);
             } catch (Exception e) {
-                compensate(initialState, sagaDefinition, sagaStep);
+                compensate(sagaData, sagaDefinition, sagaStep);
                 break;
             }
         }
-        return initialState;
+        return sagaData;
     }
 
-    private void compensate(final E initialState,
-                            final SagaDefinition<E> sagaDefinition,
-                            final SagaStep<E> failedStep) {
+    private void compensate(final D sagaData,
+                            final SagaDefinition<D> sagaDefinition,
+                            final SagaStep<D> failedStep) {
         LOGGER.error("Step {} failed!", failedStep.getName());
-        List<SagaStep<E>> sagaSteps = sagaDefinition.getSagaSteps();
-        ArrayList<SagaStep<E>> reverseSagaSteps = reverseSagaSteps(sagaSteps);
+        List<SagaStep<D>> sagaSteps = sagaDefinition.getSagaSteps();
+        ArrayList<SagaStep<D>> reversedSagaSteps = reverseSagaSteps(sagaSteps);
 
-        int failedStepIndex = reverseSagaSteps.indexOf(failedStep);
-        ListIterator<SagaStep<E>> sagaStepListIterator = reverseSagaSteps.listIterator(failedStepIndex);
+        final int failedStepIndex = reversedSagaSteps.indexOf(failedStep);
+        ListIterator<SagaStep<D>> reversedSagaStepsIterator = reversedSagaSteps.listIterator(failedStepIndex);
 
-        while (sagaStepListIterator.hasNext()) {
-            SagaStep<E> next = sagaStepListIterator.next();
-            LOGGER.error("Calling {} compensation method!", next.getName());
-            next.getCompensation().accept(initialState);
+        while (reversedSagaStepsIterator.hasNext()) {
+            final SagaStep<D> stepToCompensate = reversedSagaStepsIterator.next();
+            LOGGER.error("Calling {} compensation method!", stepToCompensate.getName());
+            stepToCompensate.getCompensation().accept(sagaData);
         }
     }
 
-    private ArrayList<SagaStep<E>> reverseSagaSteps(List<SagaStep<E>> sagaSteps) {
-        ArrayList<SagaStep<E>> clone = new ArrayList<>(sagaSteps);
+    private ArrayList<SagaStep<D>> reverseSagaSteps(List<SagaStep<D>> sagaSteps) {
+        ArrayList<SagaStep<D>> clone = new ArrayList<>(sagaSteps);
         Collections.reverse(clone);
         return clone;
     }
