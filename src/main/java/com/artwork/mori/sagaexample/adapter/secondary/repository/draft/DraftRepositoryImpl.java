@@ -1,4 +1,4 @@
-package com.artwork.mori.sagaexample.adapter.repository.draft;
+package com.artwork.mori.sagaexample.adapter.secondary.repository.draft;
 
 import com.artwork.mori.sagaexample.application.port.DraftRepository;
 import com.artwork.mori.sagaexample.domain.Draft;

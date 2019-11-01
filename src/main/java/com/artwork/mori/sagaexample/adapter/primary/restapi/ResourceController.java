@@ -1,4 +1,4 @@
-package com.artwork.mori.sagaexample.adapter.restapi;
+package com.artwork.mori.sagaexample.adapter.primary.restapi;
 
 import com.artwork.mori.sagaexample.application.command.ApproveResourceCreation;
 import com.artwork.mori.sagaexample.application.gateway.ApplicationGateway;
@@ -23,8 +23,8 @@ public class ResourceController {
     public void sign() {
         ApproveResourceCreation approveResourceCreation = ApproveResourceCreation.of();
         applicationGateway
-                //We can validate request body here, can be helpfully when more sophisticated validation is needed
+                //We can validate command here, can be helpfully when more sophisticated validation is needed
                 .validate(approveResourceCreation)
-                .then(approveResourceCreation);
+                .handle(approveResourceCreation);
     }
 }

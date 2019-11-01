@@ -16,7 +16,7 @@ public class ArchitectureConstraintTest {
     ArchRule onionArchitectureTest = onionArchitecture()
             .applicationServices("..application..")
             .domainModels("..domain..")
-            .adapter("authorizationserver", "..adapter.authorizationserver..")
-            .adapter("draftrepository", "..adapter.repository.draft..")
-            .adapter("restapi", "..adapter.restapi..");
+            .adapter("primary-restapi", "..adapter.primary.restapi..")
+            .adapter("secondary-authorizationserver", "..adapter.secondary.authorizationserver..")
+            .adapter("secondary-draftrepository", "..adapter.secondary.repository.draft..");
 }

@@ -1,4 +1,4 @@
-package com.artwork.mori.sagaexample.adapter.authorizationserver;
+package com.artwork.mori.sagaexample.adapter.secondary.authorizationserver;
 
 import com.artwork.mori.sagaexample.application.port.AuthorizationServerFacade;
 import org.springframework.stereotype.Component;
